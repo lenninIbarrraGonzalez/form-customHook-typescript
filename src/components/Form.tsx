@@ -1,26 +1,7 @@
-import { useState } from 'react';
-
-interface DataForm {
-  userName: string;
-  email: string;
-}
+import { useForm } from '../hooks/useForm';
 
 export const Form = () => {
-  const [formState, setFormState] = useState<DataForm>({
-    userName: '',
-    email: '',
-  });
-
-  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = target;
-
-    if (name in formState) {
-      setFormState((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
+  const { userName, email, formState, handleChange, handleReset } = useForm();
 
   return (
     <section className="container">
@@ -32,7 +13,7 @@ export const Form = () => {
           type="text"
           placeholder="Nombre"
           name="userName"
-          value={formState.userName}
+          value={userName}
           onChange={handleChange}
         />
 
@@ -41,14 +22,19 @@ export const Form = () => {
           type="email"
           placeholder="email@domain.com"
           name="email"
-          value={formState.email}
+          value={email}
           onChange={handleChange}
         />
       </div>
 
-      <h4>{formState.userName}</h4>
-      <h4>{formState.email}</h4>
+      <h4>{!userName ? <span>no existe un nombre</span> : userName}</h4>
+      <h4>{!email ? <span>no existe un correo</span> : email}</h4>
       <pre>{JSON.stringify(formState)}</pre>
+
+      <hr />
+      <button className="btn btn-outline-primary" onClick={handleReset}>
+        Reiniciar
+      </button>
     </section>
   );
 };
